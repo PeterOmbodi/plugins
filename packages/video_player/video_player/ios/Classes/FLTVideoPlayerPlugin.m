@@ -327,7 +327,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
     }
     // The player may be initialized but still needs to determine the duration.
     if ([self duration] == 0 && ![self isDurationIndefinite]) {
-      return;
+      //return;
     }
 
     _isInitialized = true;
