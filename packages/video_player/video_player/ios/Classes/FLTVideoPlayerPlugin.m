@@ -322,15 +322,16 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
     CGFloat height = size.height;
 
     // The player has not yet initialized.
-    if (height == CGSizeZero.height && width == CGSizeZero.width) {
-      //return;
+    if (height == CGSizeZero.height && width == CGSizeZero.width && ![self isDurationIndefinite]) {
+      return;
     }
     // The player may be initialized but still needs to determine the duration.
     if ([self duration] == 0 && ![self isDurationIndefinite]) {
-      //return;
+      return;
     }
 
-    //_isInitialized = true;
+    _isInitialized = true;
+    _isInitialized = true;
     _eventSink(@{
       @"event" : @"initialized",
       @"duration" : @([self duration]),
