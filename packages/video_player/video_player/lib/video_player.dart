@@ -11,15 +11,16 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
 
+import 'src/closed_caption_file.dart';
+
 export 'package:video_player_platform_interface/video_player_platform_interface.dart'
     show DurationRange, DataSourceType, VideoFormat, VideoPlayerOptions;
 
-import 'src/closed_caption_file.dart';
 export 'src/closed_caption_file.dart';
 
 final VideoPlayerPlatform _videoPlayerPlatform = VideoPlayerPlatform.instance
-  // This will clear all open videos on the platform when a full restart is
-  // performed.
+// This will clear all open videos on the platform when a full restart is
+// performed.
   ..init();
 
 /// The duration, current position, buffering state, error state and settings
@@ -138,10 +139,15 @@ class VideoPlayerValue {
     double? playbackSpeed,
     String? errorDescription,
   }) {
+    final newDuration = duration ?? this.duration;
+    final newPosition = position ?? this.position;
+    final fixedDuration = newDuration == null || newDuration > newPosition
+        ? newDuration
+        : newPosition;
     return VideoPlayerValue(
-      duration: duration ?? this.duration,
+      duration: fixedDuration,
       size: size ?? this.size,
-      position: position ?? this.position,
+      position: newPosition,
       caption: caption ?? this.caption,
       buffered: buffered ?? this.buffered,
       isInitialized: isInitialized ?? this.isInitialized,
@@ -572,6 +578,9 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   void _updatePosition(Duration position) {
     value = value.copyWith(position: position);
     value = value.copyWith(caption: _getCaptionAt(position));
+    if (position.inSeconds > value.duration.inSeconds) {
+      value = value.copyWith(duration: position);
+    }
   }
 }
 
