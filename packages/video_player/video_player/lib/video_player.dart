@@ -139,15 +139,10 @@ class VideoPlayerValue {
     double? playbackSpeed,
     String? errorDescription,
   }) {
-    final newDuration = duration ?? this.duration;
-    final newPosition = position ?? this.position;
-    final fixedDuration = newDuration == null || newDuration > newPosition
-        ? newDuration
-        : newPosition;
     return VideoPlayerValue(
-      duration: fixedDuration,
+      duration: duration ?? this.duration,
       size: size ?? this.size,
-      position: newPosition,
+      position: position ?? this.position,
       caption: caption ?? this.caption,
       buffered: buffered ?? this.buffered,
       isInitialized: isInitialized ?? this.isInitialized,
@@ -578,7 +573,7 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   void _updatePosition(Duration position) {
     value = value.copyWith(position: position);
     value = value.copyWith(caption: _getCaptionAt(position));
-    if (position.inSeconds > value.duration.inSeconds) {
+    if (position.inMilliseconds > value.duration.inMilliseconds) {
       value = value.copyWith(duration: position);
     }
   }
