@@ -5,6 +5,7 @@ def args = ["-Xlint:deprecation","-Xlint:unchecked","-Werror"]
 buildscript {
     repositories {
         google()
+        jcenter()
     }
 
     dependencies {
@@ -15,6 +16,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
+        jcenter()
     }
 }
 
